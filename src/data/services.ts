@@ -1,0 +1,58 @@
+import { Service } from '../types';
+
+export const mockServices: Service[] = [
+  {
+    id: 'svc-1',
+    name: 'API Gateway',
+    status: 'Healthy',
+    uptime: 99.99,
+    requestRate: 4500,
+    errorRate: 0.1,
+    latency: 45,
+  },
+  {
+    id: 'svc-2',
+    name: 'Authentication Service',
+    status: 'Warning',
+    uptime: 99.95,
+    requestRate: 1200,
+    errorRate: 2.5,
+    latency: 120,
+  },
+  {
+    id: 'svc-3',
+    name: 'User Service',
+    status: 'Healthy',
+    uptime: 99.99,
+    requestRate: 850,
+    errorRate: 0.05,
+    latency: 35,
+  },
+  {
+    id: 'svc-4',
+    name: 'Notification Service',
+    status: 'Healthy',
+    uptime: 99.9,
+    requestRate: 300,
+    errorRate: 0.2,
+    latency: 80,
+  },
+  {
+    id: 'svc-5',
+    name: 'AI Service',
+    status: 'Critical',
+    uptime: 98.5,
+    requestRate: 150,
+    errorRate: 8.4,
+    latency: 1500,
+  },
+  {
+    id: 'svc-6',
+    name: 'Database Cluster',
+    status: 'Healthy',
+    uptime: 99.999,
+    requestRate: 8000,
+    errorRate: 0.01,
+    latency: 5,
+  },
+];
