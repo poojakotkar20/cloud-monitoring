@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    environment:
+      - VITE_BACKEND_URL=http://localhost:3000
+
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      - PROMETHEUS_URL=http://prometheus:9090
+      - LOKI_URL=http://loki:3100
+      - ML_SERVICE_URL=http://ml-service:5000
+    depends_on:
+      - prometheus
+      - loki
+      - ml-service
+
+  ml-service:
+    build: ./ml-service
+    ports:
+      - "5000:5000"
+
+  api-service:
+    build: ./services/api-service
+    ports:
+      - "4000:4000"
+    environment:
+      - SERVICE_NAME=api-service
+      - PORT=4000
+      - BACKEND_URL=http://backend:3000
+      - LOKI_URL=http://loki:3100
+
+  auth-service:
+    build: ./services/api-service
+    ports:
+      - "4001:4001"
+    environment:
+      - SERVICE_NAME=auth-service
+      - PORT=4001
+      - BACKEND_URL=http://backend:3000
+      - LOKI_URL=http://loki:3100
+
+  worker-service:
+    build: ./services/api-service
+    ports:
+      - "4002:4002"
+    environment:
+      - SERVICE_NAME=worker-service
+      - PORT=4002
+      - BACKEND_URL=http://backend:3000
+      - LOKI_URL=http://loki:3100
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
+    ports:
+      - "9090:9090"
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    volumes:
+      - ./monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    ports:
+      - "9093:9093"
+
+  loki:
+    image: grafana/loki:main
+    volumes:
+      - ./monitoring/loki/local-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
