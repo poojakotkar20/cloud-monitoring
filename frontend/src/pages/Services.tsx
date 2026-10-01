@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { mockServices } from '../data/services';
 import { Server, ArrowRight } from 'lucide-react';
 
 export default function Services() {
   const navigate = useNavigate();
-  const [services, setServices] = useState<any[]>([]);
-
-  useEffect(() => {
-    fetch('/api/services')
-      .then(res => res.json())
-      .then(data => setServices(data))
-      .catch(e => console.error(e));
-  }, []);
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -21,7 +14,7 @@ export default function Services() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-        {services.map((service) => (
+        {mockServices.map((service) => (
           <div 
             key={service.id}
             onClick={() => navigate(`/services/${service.id}`)}

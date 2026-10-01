@@ -1,26 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { mockLogs } from '../data/logs';
+import { mockServices } from '../data/services';
 import { Search, Filter, X } from 'lucide-react';
 
 export default function Logs() {
-  const [logs, setLogs] = useState<any[]>([]);
-  const [services, setServices] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [levelFilter, setLevelFilter] = useState('ALL');
   const [serviceFilter, setServiceFilter] = useState('ALL');
 
-  useEffect(() => {
-    fetch('/api/logs')
-      .then(res => res.json())
-      .then(data => setLogs(data))
-      .catch(e => console.error(e));
-      
-    fetch('/api/services')
-      .then(res => res.json())
-      .then(data => setServices(data))
-      .catch(e => console.error(e));
-  }, []);
-
-  const filteredLogs = logs.filter(log => {
+  const filteredLogs = mockLogs.filter(log => {
     const matchesSearch = log.message.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           (log.requestId && log.requestId.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesLevel = levelFilter === 'ALL' || log.level === levelFilter;
@@ -68,7 +56,7 @@ export default function Logs() {
             className="bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2 max-w-[150px]"
           >
             <option value="ALL">All Services</option>
-            {services.map(s => (
+            {mockServices.map(s => (
               <option key={s.id} value={s.id}>{s.name}</option>
             ))}
           </select>
@@ -106,7 +94,7 @@ export default function Logs() {
           ) : (
             <div className="divide-y divide-slate-800/50">
               {filteredLogs.map(log => {
-                const service = services.find(s => s.id === log.serviceId);
+                const service = mockServices.find(s => s.id === log.serviceId);
                 return (
                   <div key={log.id} className="flex hover:bg-slate-800/30 transition-colors py-2 px-4 group">
                     <div className="w-40 flex-shrink-0 text-slate-500 pt-0.5">
@@ -114,7 +102,7 @@ export default function Logs() {
                     </div>
                     <div className="w-24 flex-shrink-0">
                       <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
-                        log.level === 'ERROR' || log.level === 'CRITICAL' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
+                        log.level === 'ERROR' || log.level === 'CRITICAL' as any ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
                         log.level === 'WARNING' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
                         log.level === 'DEBUG' ? 'bg-slate-700 text-slate-300 border border-slate-600' :
                         'bg-blue-500/10 text-blue-400 border border-blue-500/20'

@@ -1,7 +1,0 @@
-route:
-  receiver: 'backend-webhook'
-
-receivers:
-- name: 'backend-webhook'
-  webhook_configs:
-  - url: 'http://backend:3000/api/webhook/alerts'

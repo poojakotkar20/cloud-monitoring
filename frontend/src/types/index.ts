@@ -60,11 +60,6 @@ export interface Alert {
   time: string;
   status: AlertStatus;
   message: string;
-  mlRecommendation?: {
-    text: string;
-    type: string;
-    confidence: number;
-  };
 }
 
 export interface AiMessage {

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { mockServices } from '../data/services';
 import { mockTimeSeriesData } from '../data/metrics';
 import { Activity, Server, AlertTriangle, Clock } from 'lucide-react';
 import { 
@@ -7,24 +8,9 @@ import {
 } from 'recharts';
 
 export default function Overview() {
-  const [services, setServices] = useState<any[]>([]);
-  const [alerts, setAlerts] = useState<any[]>([]);
-
-  useEffect(() => {
-    fetch('/api/services')
-      .then(r => r.json())
-      .then(d => setServices(d))
-      .catch(e => console.error(e));
-      
-    fetch('/api/alerts')
-      .then(r => r.json())
-      .then(d => setAlerts(d))
-      .catch(e => console.error(e));
-  }, []);
-
-  const activeAlerts = alerts.filter(a => a.status === 'Active').length;
-  const avgLatency = services.length ? Math.round(services.reduce((acc, s) => acc + s.latency, 0) / services.length) : 0;
-  const totalRequests = services.reduce((acc, s) => acc + s.requestRate, 0);
+  const activeAlerts = 3;
+  const avgLatency = Math.round(mockServices.reduce((acc, s) => acc + s.latency, 0) / mockServices.length);
+  const totalRequests = mockServices.reduce((acc, s) => acc + s.requestRate, 0);
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -34,7 +20,7 @@ export default function Overview() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <SummaryCard icon={Server} title="Active Services" value={services.length} color="text-blue-400" bg="bg-blue-500/10" border="border-blue-500/20" />
+        <SummaryCard icon={Server} title="Active Services" value={mockServices.length} color="text-blue-400" bg="bg-blue-500/10" border="border-blue-500/20" />
         <SummaryCard icon={Activity} title="Requests/min" value={(totalRequests / 1000).toFixed(1) + 'k'} color="text-green-400" bg="bg-green-500/10" border="border-green-500/20" />
         <SummaryCard icon={Clock} title="Avg Latency" value={`${avgLatency}ms`} color="text-amber-400" bg="bg-amber-500/10" border="border-amber-500/20" />
         <SummaryCard icon={AlertTriangle} title="Active Alerts" value={activeAlerts} color="text-red-400" bg="bg-red-500/10" border="border-red-500/20" />
@@ -69,7 +55,7 @@ export default function Overview() {
           <h2 className="text-lg font-semibold text-slate-200 mb-4">Error Rate by Service</h2>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={services} layout="vertical" margin={{ left: 40 }}>
+              <BarChart data={mockServices} layout="vertical" margin={{ left: 40 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" horizontal={false} />
                 <XAxis type="number" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis dataKey="name" type="category" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} width={100} />
@@ -100,8 +86,8 @@ export default function Overview() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-700/50">
-              {services.map((service, idx) => (
-                <tr key={service.id || idx} className="hover:bg-slate-700/20 transition-colors">
+              {mockServices.map((service) => (
+                <tr key={service.id} className="hover:bg-slate-700/20 transition-colors">
                   <td className="px-5 py-4 font-medium text-slate-200">{service.name}</td>
                   <td className="px-5 py-4">
                     <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
@@ -112,7 +98,7 @@ export default function Overview() {
                       {service.status}
                     </span>
                   </td>
-                  <td className="px-5 py-4 text-right text-slate-300">{service.requestRate?.toLocaleString()}</td>
+                  <td className="px-5 py-4 text-right text-slate-300">{service.requestRate.toLocaleString()}</td>
                   <td className="px-5 py-4 text-right text-slate-300">{service.errorRate}%</td>
                   <td className="px-5 py-4 text-right text-slate-300">{service.latency}ms</td>
                 </tr>

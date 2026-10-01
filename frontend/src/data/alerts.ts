@@ -5,20 +5,6 @@ const now = new Date();
 
 export const mockAlerts: Alert[] = [
   {
-    id: 'alt-0',
-    name: 'API Gateway - High CPU Usage',
-    severity: 'Critical',
-    serviceId: 'svc-1',
-    time: formatISO(subMinutes(now, 1)),
-    status: 'Active',
-    message: 'CPU Usage: 94% | Memory Usage: 68% | Error Rate: 4.2% | Response Latency: 420 ms',
-    mlRecommendation: {
-      text: 'Investigate CPU-intensive processes in the API Gateway and consider scaling the service if high utilization persists.',
-      type: 'RESOURCE_SCALING',
-      confidence: 91
-    }
-  },
-  {
     id: 'alt-1',
     name: 'High Error Rate',
     severity: 'Critical',

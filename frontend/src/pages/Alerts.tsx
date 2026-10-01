@@ -1,53 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { mockAlerts } from '../data/alerts';
+import { mockServices } from '../data/services';
 import { AlertTriangle, CheckCircle, Info, Clock, AlertCircle } from 'lucide-react';
 
 export default function Alerts() {
-  const [alerts, setAlerts] = useState<any[]>([]);
-  const [services, setServices] = useState<any[]>([]);
+  const [alerts, setAlerts] = useState(mockAlerts);
 
-  useEffect(() => {
-    // Polling alerts every 5 seconds
-    const fetchAlerts = () => {
-      fetch('/api/alerts')
-        .then(res => res.json())
-        .then(data => setAlerts(data))
-        .catch(e => console.error(e));
-    };
-    fetchAlerts();
-    const interval = setInterval(fetchAlerts, 5000);
-    
-    fetch('/api/services')
-      .then(res => res.json())
-      .then(data => setServices(data))
-      .catch(e => console.error(e));
-      
-    return () => clearInterval(interval);
-  }, []);
-  
   const handleStatusChange = (id: string, newStatus: any) => {
-    // normally we would PUT to backend
     setAlerts(alerts.map(a => a.id === id ? { ...a, status: newStatus } : a));
-  };
-  
-  const triggerDemoIncident = async () => {
-    try {
-      await fetch('/api/demo/incident', { method: 'POST' });
-      alert("Incident toggled! Check Prometheus and Alerts shortly.");
-    } catch (e) {
-      alert("Failed to toggle incident");
-    }
   };
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-white mb-1">Alerts Management</h1>
-          <p className="text-slate-400">View and respond to system anomalies</p>
-        </div>
-        <button onClick={triggerDemoIncident} className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition">
-          Toggle Demo Incident
-        </button>
+      <div>
+        <h1 className="text-2xl font-bold text-white mb-1">Alerts Management</h1>
+        <p className="text-slate-400">View and respond to system anomalies</p>
       </div>
 
       <div className="flex gap-4 mb-6">
@@ -58,7 +25,7 @@ export default function Alerts() {
 
       <div className="space-y-4">
         {alerts.map(alert => {
-          const service = services.find(s => s.id === alert.serviceId) || { name: alert.serviceId };
+          const service = mockServices.find(s => s.id === alert.serviceId);
           return (
             <div key={alert.id} className={`bg-slate-800 border rounded-xl p-5 shadow-sm transition-all ${
               alert.status === 'Active' && alert.severity === 'Critical' ? 'border-red-500/50' : 
@@ -91,30 +58,6 @@ export default function Alerts() {
                         {alert.severity}
                       </span>
                     </div>
-                    
-                    {alert.mlRecommendation && (
-                      <div className="mt-4 p-4 bg-slate-900 border border-indigo-500/30 rounded-lg relative overflow-hidden">
-                        <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500"></div>
-                        <div className="flex items-start">
-                          <div className="flex-1">
-                            <h4 className="text-xs font-bold text-indigo-400 mb-1 uppercase tracking-wider flex items-center">
-                              <span className="mr-2">🤖</span> ML RECOMMENDATION
-                            </h4>
-                            <p className="text-sm text-slate-300 mt-2 mb-3">
-                              {alert.mlRecommendation.text}
-                            </p>
-                            <div className="flex gap-4 text-xs">
-                              <span className="text-slate-400">
-                                <span className="text-slate-500">Recommendation Type:</span> {alert.mlRecommendation.type}
-                              </span>
-                              <span className="text-slate-400">
-                                <span className="text-slate-500">Confidence:</span> <span className="text-indigo-400 font-medium">{alert.mlRecommendation.confidence}%</span>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
 

@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { mockTimeSeriesData } from '../data/metrics';
 import { AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Clock } from 'lucide-react';
 
 export default function Metrics() {
   const [timeRange, setTimeRange] = useState('1h');
-  const [displayData, setDisplayData] = useState<any[]>([]);
 
-  useEffect(() => {
-    // In a real app, we'd pass the timeRange to the backend or Prom API
-    fetch('/api/metrics')
-      .then(res => res.json())
-      .then(data => setDisplayData(data))
-      .catch(e => console.error(e));
-  }, [timeRange]);
+  // Simulate changing data based on time range (just slicing for demo)
+  const displayData = timeRange === '15m' ? mockTimeSeriesData.slice(-15) :
+                      timeRange === '1h' ? mockTimeSeriesData :
+                      timeRange === '6h' ? mockTimeSeriesData.filter((_, i) => i % 6 === 0) :
+                      mockTimeSeriesData.filter((_, i) => i % 24 === 0);
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">

@@ -1,64 +1,59 @@
-# Observability Platform (Sprint-1 Prototype)
+# Observability Platform - Sprint 1 Demo
 
-## Project Overview
-This project is a 50% milestone prototype of a comprehensive Observability Platform. It is designed to provide developers and DevOps engineers with a "single pane of glass" to monitor the health, performance, and reliability of their microservices architecture.
+This is a prototype / Sprint-1 demonstration for the Observability Platform project.
 
-## Architecture
+## Purpose
+This platform aims to provide a unified dashboard for monitoring microservices, viewing logs, analyzing metrics, tracing requests, and receiving alerts. This prototype demonstrates the core UI/UX and architecture for the first 50% of the project.
 
-```text
-docker-compose
-    |
-    ├── frontend (React + Vite + Tailwind CSS)
-    ├── backend (Node.js/Express)
-    ├── api-service (Sample Service 1)
-    ├── auth-service (Sample Service 2)
-    ├── worker-service (Sample Service 3)
-    ├── prometheus (Metrics Collection)
-    ├── loki (Log Collection)
-    ├── alertmanager (Alerting)
-    └── ml-service (Python + Scikit-Learn)
-```
+## Implemented Features (Sprint 1)
+- **Authentication**: Professional login screen (simulated).
+- **Dashboard Overview**: Summary of system health, active services, error rates, and request traffic.
+- **Service Directory**: List of monitored microservices with individual health status and performance metrics.
+- **Service Details**: Deep-dive into a specific service showing latency charts, recent alerts, and logs.
+- **Logs Explorer**: Real-time log view with filtering by level, service, and search queries.
+- **Metrics Dashboard**: Visualizations for CPU, Memory, Request Rates, and Latency across different time ranges.
+- **Distributed Tracing**: Visual flow of requests across multiple services with duration and status tracking.
+- **Alerts Management**: Acknowledgment and resolution workflow for system anomalies.
+- **AI Assistant**: Prototype interface for querying observability data (mocked responses for Sprint 1).
+- **Architecture ready**: Data models and TypeScript types are separated to allow easy integration with a real backend later.
 
-## Technologies
-- **Frontend**: React 18, TypeScript, Vite, Tailwind CSS (v4), Recharts
-- **Backend API**: Node.js, Express
-- **Sample Services**: Node.js
-- **Machine Learning**: Python, Flask, Scikit-learn (Random Forest)
-- **Monitoring Infrastructure**: Prometheus, Loki, Alertmanager
-- **Deployment**: Docker, Docker Compose
+## Limitations / Simulated Features
+- Currently, telemetry data (logs, traces, metrics, alerts) is **mocked** locally. 
+- The AI Assistant is pre-programmed with mock responses and does not yet connect to an LLM or RAG pipeline.
+- Authentication accepts the specific demo credentials below and doesn't connect to a real identity provider.
 
-## How to Start the Project
+## Demo Login
+- **Email:** `demo@observability.local`
+- **Password:** `demo123`
 
-Make sure you have **Docker Desktop** installed and running.
-
-1. Open your terminal in this directory.
-2. Build and start the infrastructure:
-   ```bash
-   docker compose up --build -d
-   ```
-3. Access the platform:
-   - **Frontend UI**: `http://localhost:5173`
-   - **Prometheus**: `http://localhost:9090`
-   - **Loki**: `http://localhost:3100`
-
-## How to Stop the Project
+## Running the Project
 
 ```bash
-docker compose down
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+
+# Build for production
+npm run build
 ```
 
-## Demo Incident Procedure
-To demonstrate the full pipeline (from real metrics to ML recommendation):
+## Future Work (Sprint 2 - Remaining 50%)
+- Real-time telemetry ingestion via API.
+- Integration with OpenTelemetry.
+- Connect to a real database for historical metrics and logs.
+- Real backend API for authentication and services data.
+- Live Distributed Tracing implementation.
+- Real AI/LLM integration with RAG over observability data.
+- User Management & RBAC (Role-Based Access Control).
+- Advanced Alerting Rules engine.
 
-1. Open the **Alerts** page in the frontend (`http://localhost:5173/alerts`).
-2. Click the red **"Toggle Demo Incident"** button.
-3. This signals the `api-service` to intentionally generate errors and simulate high CPU load.
-4. Prometheus will detect the metric changes.
-5. The Alertmanager will fire a critical alert to the Backend.
-6. The Backend queries the **ML Service** to analyze the telemetry data.
-7. The ML Service (Random Forest model) returns a recommendation.
-8. The new alert, complete with the ML recommendation, automatically appears on the Alerts page!
-
-## ML Recommendation Explanation
-*The ML model currently uses a prototype/synthetic training dataset and is intended for Sprint-1 demonstration. Real historical incident data will be used in future iterations.*
-The Random Forest Classifier analyzes incoming alert metrics (CPU, Memory, Error Rate, Latency, Request Rate) to categorize the incident and recommend actionable steps to the engineer.
+## Technology Stack
+- **Frontend Framework:** React 18
+- **Language:** TypeScript
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS
+- **Routing:** React Router (v6)
+- **Charts:** Recharts
+- **Icons:** Lucide React
