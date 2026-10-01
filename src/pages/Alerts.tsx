@@ -58,6 +58,30 @@ export default function Alerts() {
                         {alert.severity}
                       </span>
                     </div>
+                    
+                    {alert.mlRecommendation && (
+                      <div className="mt-4 p-4 bg-slate-900 border border-indigo-500/30 rounded-lg relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500"></div>
+                        <div className="flex items-start">
+                          <div className="flex-1">
+                            <h4 className="text-xs font-bold text-indigo-400 mb-1 uppercase tracking-wider flex items-center">
+                              <span className="mr-2">🤖</span> ML RECOMMENDATION
+                            </h4>
+                            <p className="text-sm text-slate-300 mt-2 mb-3">
+                              {alert.mlRecommendation.text}
+                            </p>
+                            <div className="flex gap-4 text-xs">
+                              <span className="text-slate-400">
+                                <span className="text-slate-500">Recommendation Type:</span> {alert.mlRecommendation.type}
+                              </span>
+                              <span className="text-slate-400">
+                                <span className="text-slate-500">Confidence:</span> <span className="text-indigo-400 font-medium">{alert.mlRecommendation.confidence}%</span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
